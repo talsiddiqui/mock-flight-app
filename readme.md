@@ -1,144 +1,91 @@
+
 # ✈️ Flight Data ETL Project
 
-A full-stack data engineering project that ingests flight CSV data into a PostgreSQL database using a Spring Boot ETL pipeline and displays results via a Next.js UI. The entire system is containerized using Docker.
+A full-stack data engineering project that ingests flight CSV data into a PostgreSQL database using a Spring Boot ETL pipeline and displays results via a Next.js UI. 
+
+*Note: Docker is used exclusively to run the PostgreSQL 16 Alpine database instance. The frontend and backend run locally.*
+
+---
+
+## 📊 Dataset Attribution
+
+The flight data used in this project is sourced from Kaggle:
+[Flight Delay and Cancellation Dataset (2019-2023)](https://www.kaggle.com/datasets/patrickzel/flight-delay-and-cancellation-dataset-2019-2023)
+
+---
+
+## 🎥 Application Demo
+
+![App UI](data/ui.gif)
 
 ---
 
 ## 🧱 Tech Stack
 
-- Backend: Spring Boot (Java)
-- Database: PostgreSQL
-- Frontend: Next.js (React)
-- ETL: CSV ingestion via Spring Boot
-- Containerization: Docker + Docker Compose
+- **Backend:** Spring Boot (Java)
+- **Database:** PostgreSQL 16 Alpine (via Docker)
+- **Frontend:** Next.js (React)
+- **ETL:** CSV ingestion via Spring Boot
 
 ---
 
 ## 📊 Architecture Overview
 
-```
-
+```text
 CSV File Upload
 ↓
 Spring Boot ETL API
 ↓
-PostgreSQL Database
+PostgreSQL Database (Docker)
 ↓
 Next.js Frontend UI
-
 ```
 
 ---
 
 ## 📁 Project Structure
 
-```
-
+```text
 flight-app/
 │
-├── backend/        # Spring Boot ETL + API
+├── backend/demo/   # Spring Boot ETL + API
 ├── frontend/       # Next.js UI
 ├── database/       # SQL init scripts
-├── docker-compose.yml
 └── README.md
-
-````
-
----
-
-## 🚀 Getting Started
-
-### 1. Prerequisites
-
-- Docker Desktop installed
-- Java 17 (for local backend dev)
-- Node.js 18+ (for frontend dev)
-- Maven (if running backend outside Docker)
-
----
-
-## 🐳 Running with Docker (Recommended)
-
-From the project root:
-
-```bash
-docker compose up --build
-````
-
-Services will start:
-
-| Service  | URL                                            |
-| -------- | ---------------------------------------------- |
-| Frontend | [http://localhost:3000](http://localhost:3000) |
-| Backend  | [http://localhost:8080](http://localhost:8080) |
-| Postgres | localhost:5432                                 |
-
----
-
-## 📤 CSV Upload Flow
-
-1. Open frontend UI
-2. Upload flight CSV file
-3. File is sent to:
-
 ```
-POST /api/upload
-```
-
-4. Spring Boot:
-
-   * Parses CSV
-   * Normalizes airlines + airports
-   * Inserts flights into PostgreSQL
 
 ---
 
 ## 🗄️ Database Schema
 
-* airlines (carrier metadata)
-* airports (airport + city mapping)
-* flights (main fact table with delay metrics)
+![Database ERD](data/ERD.png)
+
+* **airlines**: Carrier metadata
+* **airports**: Airport + city mapping
+* **flights**: Main fact table with delay metrics and foreign keys
 
 ---
 
-## 🔌 Backend API
+## 🚀 Running Locally
 
-### Upload CSV
+### 1. Prerequisites
+- Docker Desktop installed (for Postgres)
+- Java 17+ 
+- Node.js 18+ 
+- Maven 
 
-```
-POST /api/upload
-```
+### 2. Database
+Ensure your PostgreSQL 16 Alpine container is running and accessible at `localhost:5432`.
 
-**Request:**
-
-* multipart file (`file`)
-
-**Response:**
-
-* success / error message
-
----
-
-### Future endpoints (planned)
-
-* GET /api/flights
-* GET /api/flights?date=YYYY-MM-DD
-* GET /api/airlines
-* GET /api/airports
-
----
-
-## 🧪 Running Locally (without Docker)
-
-### Backend
-
+### 3. Backend
+Navigate to the backend directory and run the Spring Boot application:
 ```bash
-cd backend
+cd backend\demo
 mvn spring-boot:run
 ```
 
-### Frontend
-
+### 4. Frontend
+Navigate to the frontend directory, install dependencies, and start the development server:
 ```bash
 cd frontend
 npm install
@@ -147,22 +94,29 @@ npm run dev
 
 ---
 
+## 🔌 Current Backend API Endpoints
+
+### 1. Upload CSV
+* **Endpoint:** `POST http://localhost:8080/api/flights/upload`
+* **Request:** `multipart/form-data` with the file attached in the body under the key `file`.
+* **Description:** Parses the CSV, normalizes airlines and airports, and inserts flights into the database.
+
+### 2. Fetch Flights
+* **Endpoint:** `GET http://localhost:8080/api/flights`
+* **Query Parameters:** `?date=YYYY-MM-DD` (Optional)
+* **Example:** `GET http://localhost:8080/api/flights?date=2019-01-01`
+* **Description:** Returns a JSON list of flight records, optionally filtered by a specific date.
+
+---
+
 ## ⚙️ Environment Variables
 
-Backend (`application.yml`):
+Backend (`application.properties`):
 
-* DB URL
-* DB username
-* DB password
-
-Example (Docker):
-
-```yaml
-spring:
-  datasource:
-    url: jdbc:postgresql://postgres:5432/flightdb
-    username: flightuser
-    password: flightpass
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/flightdb
+spring.datasource.username=flightuser
+spring.datasource.password=flightpass
 ```
 
 ---
@@ -172,7 +126,7 @@ spring:
 * CSV-based ETL pipeline
 * Airline and airport normalization
 * Relational schema design
-* Dockerized full stack setup
+* Next.js Client Components with API integration
 * Modular Spring Boot architecture
 
 ---
@@ -189,7 +143,7 @@ spring:
 
 * Batch inserts for ETL performance
 * Pagination for flight queries
-* Filtering by airline/airport/date
+* Filtering by airline/airport
 * Charts in frontend (delays, routes)
 * Authentication layer
 * Async ingestion queue
