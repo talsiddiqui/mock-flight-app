@@ -1,0 +1,63 @@
+# =========================
+# OS / IDE
+# =========================
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+
+# =========================
+# Backend (Spring Boot / Java)
+# =========================
+backend/target/
+backend/*.log
+*.log
+data/*
+
+# Maven / Gradle
+*.class
+*.jar
+*.war
+*.ear
+
+# Spring Boot
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+
+# =========================
+# Frontend (Next.js)
+# =========================
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# =========================
+# Environment files
+# =========================
+.env
+.env.*
+frontend/.env
+backend/.env
+
+# =========================
+# Docker volumes / data
+# =========================
+postgres_data/
+*.pid
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+
+# =========================
+# Optional: Docker overrides
+# =========================
+docker-compose.override.yml
