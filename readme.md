@@ -16,7 +16,7 @@ The flight data used in this project is sourced from Kaggle:
 
 ## 🎥 Application Demo
 
-![App UI](frontend/ui.gif)
+![App UI](ui.gif)
 
 ---
 
