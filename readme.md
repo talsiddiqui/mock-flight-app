@@ -16,7 +16,7 @@ The flight data used in this project is sourced from Kaggle:
 
 ## 🎥 Application Demo
 
-![App UI](data/ui.gif)
+![App UI](frontend/ui.gif)
 
 ---
 
@@ -58,7 +58,7 @@ flight-app/
 
 ## 🗄️ Database Schema
 
-![Database ERD](data/ERD.png)
+![Database ERD](database/ERD.png)
 
 * **airlines**: Carrier metadata
 * **airports**: Airport + city mapping
