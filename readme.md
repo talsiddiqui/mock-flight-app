@@ -32,13 +32,13 @@ The flight data used in this project is sourced from Kaggle:
 ## 📊 Architecture Overview
 
 ```text
-CSV File Upload
-↓
-Spring Boot ETL API
-↓
-PostgreSQL Database (Docker)
-↓
-Next.js Frontend UI
+CSV File Upload            Local Directory Polling (/data/schedule)
+      ↘                              ↙
+         Spring Boot ETL API
+                  ↓
+    PostgreSQL Database (Docker)
+                  ↓
+         Next.js Frontend UI
 ```
 
 ---
@@ -49,6 +49,8 @@ Next.js Frontend UI
 flight-app/
 │
 ├── backend/demo/   # Spring Boot ETL + API
+│   └── data/
+│       └── schedule/ # Drop CSVs here for auto-ingestion
 ├── frontend/       # Next.js UI
 ├── database/       # SQL init scripts
 └── README.md
@@ -109,6 +111,15 @@ npm run dev
 
 ---
 
+## ⏱️ Scheduled Ingestion (Auto-ETL)
+
+In addition to manual HTTP uploads, the backend features a scheduled task that polls a local directory for new CSV files every 5 minutes.
+
+* **Directory Path:** `backend/demo/data/schedule`
+* **De-duplication:** The system calculates a SHA-256 hash of each file. It maintains an in-memory list of processed hashes to ensure a file is never ingested twice, even if it remains in the folder.
+
+---
+
 ## ⚙️ Environment Variables
 
 Backend (`application.properties`):
@@ -124,6 +135,7 @@ spring.datasource.password=flightpass
 ## 🧠 Key Features
 
 * CSV-based ETL pipeline
+* Automated 5-minute polling with SHA-256 file hashing to prevent duplicate ingestion
 * Airline and airport normalization
 * Relational schema design
 * Next.js Client Components with API integration
